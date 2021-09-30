@@ -129,7 +129,6 @@ def combine_sales_stores_items_data():
 
 #Function for Exercise #6
 #------------------------
-
 #This function reads data from a link to a .csv file and returns a dataframe
 
 def csv_to_df(url):
