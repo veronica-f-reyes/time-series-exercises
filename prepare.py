@@ -33,9 +33,10 @@ def plot_dists():
 # Function to set the index to be the datetime variable.
 #=======================================================
 
-def set_datevar_to_index():
+def set_datevar_to_index(df):
 
     df = df.set_index('sale_date').sort_index()
+
     return
 
 
@@ -57,3 +58,70 @@ def add_sales_total_col():
 
     df['sales_total'] = df.sale_amount * df.item_price
     return
+
+
+
+#Function to read the OPS data acquired in the Acquire exercises opsd_germany_daily.csv
+# ==================================
+
+def read_germany_energy_data():
+    df_germany = pd.read_csv('https://raw.githubusercontent.com/jenfly/opsd/master/opsd_germany_daily.csv')
+
+    return  df_germany
+
+# Function to convert date column to datetime format.
+#====================================================
+
+def convert_G_data_to_date():
+    df_germany = read_germany_energy_data()
+    df_germany.Date = pd.to_datetime(df_germany.Date)
+
+    return
+
+
+# Function to plot the distribution of variables
+#=================================================================
+def plot_G_data_dist():
+    df_germany = read_germany_energy_data()
+    df_germany.Consumption.hist()
+    df_germany.Wind.hist()
+    df_germany.Solar.hist()
+
+    #Rename Wind+Solar column to Wind_Solar
+    df_germany.rename(columns={"Wind+Solar": "Wind_Solar"}, inplace=True)
+    df_germany.Wind_Solar.hist()
+
+    return
+
+# Function to set the index to be the datetime variable.
+#=======================================================
+def set_G_data_to_index():    
+    df_germany = read_germany_energy_data()
+    df_germany = df_germany.set_index('Date').sort_index()
+
+    return
+
+# Function to add a 'month' column to your dataframe.
+#===================================================
+def add_month_col_to_G_data():
+    df_germany = read_germany_energy_data()
+    df_germany['month'] = df_germany.index.month  
+
+    return
+
+# Function to fill any missing values.
+#=====================================
+
+def fill_missing_vals():
+    from sklearn.impute import SimpleImputer
+    imputer = SimpleImputer(strategy='most_frequent')
+
+    df_germany = read_germany_energy_data()
+
+    for col in df_germany.columns:
+        df_germany[[col]] = imputer.fit_transform(df_germany[[col]])
+
+    return
+
+
+    
